@@ -18,7 +18,7 @@ class SeqList {
      */
     InitList(arr = []) {
         this.seqArr = arr;
-        this.length = 0;
+        this.length = arr.length;
     }
 
     /**
@@ -40,7 +40,7 @@ class SeqList {
     /**
      * 获取线性表第i位的元素
      * @param {int} index
-     * @return {string}
+     * @return {string|int}
      */
     GetElem(index) {
         if (index < 0 || index >= this.length) return -1;
