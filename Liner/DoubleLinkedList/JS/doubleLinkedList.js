@@ -2,17 +2,18 @@
  * 节点函数
  * @param {int} data
  */
-function Node(data) {
+function DuLNode(data) {
     this.data = data;
+    this.prior = null;
     this.next = null;
 }
 
 /**
- * 线性表的链式存储结构
+ * 双链表
  * @copyright   MIT.
  * @author      Ken(gaosong0301@foxmail.com)
  */
-class SingleList {
+class DoubleLinkedList {
     /**
      * 构造函数
      */
@@ -23,16 +24,17 @@ class SingleList {
     }
 
     /**
-     * 初始化线性表
+     * 初始化双链表
      * @param {object} arr
      */
     InitList(arr) {
         for (let i = 0; i < arr.length; i++) {
-            let node = new Node(arr[i]);
+            let node = new DuLNode(arr[i]);
             if (!this.head) {
                 this.head = node;
                 this.tail = node;
             } else {
+                node.prior = this.tail;
                 this.tail.next = node;
                 this.tail = node;
             }
@@ -41,7 +43,7 @@ class SingleList {
     }
 
     /**
-     * 判断线性表是否为空
+     * 判断双链表是否为空
      * @return {boolean}
      */
     ListEmpty() {
@@ -49,7 +51,7 @@ class SingleList {
     }
 
     /**
-     * 将线性表清空
+     * 将双链表清空
      */
     ClearList() {
         this.head = null;
@@ -58,7 +60,7 @@ class SingleList {
     }
 
     /**
-     * 获取线性表第i位的元素
+     * 获取双链表第i位的元素
      * @param {int} index
      * @return {string|int}
      */
@@ -74,7 +76,7 @@ class SingleList {
     }
 
     /**
-     * 获取元素elem在线性表中的位置
+     * 获取元素elem在双链表中的位置
      * @param {int} elem
      * @return {int}
      */
@@ -92,7 +94,7 @@ class SingleList {
     }
 
     /**
-     * 向线性表中的第i位插入元素
+     * 向双链表中的第i位插入元素
      * @param {int} index
      * @param {string|int} elem
      * @return {int}
@@ -100,21 +102,22 @@ class SingleList {
     ListInsert(index, elem) {
         if (index < 0 || index > this.length) return -1;
         let pos = 0;
-        let node = new Node();
+        let node = new DuLNode(elem);
         let current = this.head;
-        node.data = elem;
         while (pos < index) {
             current = current.next;
             pos++;
         }
         node.next = current.next;
+        node.prior = current;
+        current.next.prior = node;
         current.next = node;
         this.length++;
         return 0;
     }
 
     /**
-     * 向线性表中的第i位删除元素
+     * 向双链表中的第i位删除元素
      * @param {int} index
      * @return {string|int}
      */
@@ -131,13 +134,14 @@ class SingleList {
             current = current.next;
             pos++;
         }
+        current.next.next.prior = current.next;
         current.next = current.next.next;
         this.length--;
         return 0;
     }
 
     /**
-     * 获取线性表的长度
+     * 获取双链表的长度
      * @return int
      */
     ListLength() {
@@ -150,13 +154,16 @@ class SingleList {
      */
     ReverseList() {
         let p = this.head;
-        let q = this.head;
-        while (p.next) {
-            q = p.next;
-            p.next = q.next;
-            q.next = this.head;
-            this.head = q;
+        let temp = this.head;
+        while (p) {
+            temp = p.prior;
+            p.prior = p.next;
+            p.next = temp;
+            if (p.prior == null) break;
+            else p = p.prior;
         }
+        this.head.next = null;
+        this.head = p;
         return 0;
     }
 
@@ -168,28 +175,17 @@ class SingleList {
         let string = '';
         let current = this.head;
         while (current) {
-            string += `${current.data}-> `;
+            string += `${current.data}<->`;
             current = current.next;
         }
         console.log(string.trim());
     }
-
 }
 
-
-let a = new SingleList();
+let a = new DoubleLinkedList();
 let arr = [1, 2, 3, 4, 5, 6];
 a.InitList(arr);
+a.ListPrint();
+//a.ListDelete(1);
 a.ReverseList();
 a.ListPrint();
-a.ListInsert(1, 222);
-a.ListPrint();
-console.log(a.GetElem(2));
-console.log(a.LocateElem(222));
-a.ListDelete(0);
-a.ListPrint();
-
-
-
-
-

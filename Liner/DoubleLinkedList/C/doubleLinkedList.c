@@ -230,8 +230,8 @@ void PrintList(DuLinkList dL) {
 }
 
 /**
- * Function Name: PrintList
- * Purpose: 打印链表
+ * Function Name: ReverseList
+ * Purpose: 反转链表
  * Params:
  *      @LinkList   L     链表实例
  */
