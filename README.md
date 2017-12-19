@@ -9,3 +9,7 @@
         - [C](Liner/SingleList/C/singleList.c)
         - [PHP](Liner/SingleList/PHP/singleList.php)
         - [JS](Liner/SingleList/C/singleList.c)
+    - 双链表
+        - [C](Liner/DoubleLinkedList/C/doubleLinkedList.c)
+        - [PHP](Liner/DoubleLinkedList/PHP/doubleLinkedList.php)
+        - [JS](Liner/DoubleLinkedList/C/doubleLinkedList.c)
