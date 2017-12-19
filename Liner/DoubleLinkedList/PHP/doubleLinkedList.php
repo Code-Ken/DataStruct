@@ -49,10 +49,10 @@ class DuLNode
 
     /**
      * 设置节点数值
-     * @param DuLNode $node
+     * @param  $node
      * @return int
      */
-    public function setNext(DuLNode $node)
+    public function setNext($node)
     {
         $this->next = $node;
         return 0;
@@ -70,10 +70,10 @@ class DuLNode
 
     /**
      * 设置节点数值
-     * @param DuLNode $node
+     * @param  $node
      * @return int
      */
-    public function setPrior(DuLNode $node)
+    public function setPrior($node)
     {
         $this->prior = $node;
         return 0;
@@ -233,8 +233,9 @@ class DoubleLinkedList
             $current = $current->getNext();
             $pos++;
         }
-        $current->getNext()->getNext()->setPrior($current->getNext());
-        $current->setNext($current->getNext()->getNext());
+        $current->getNext()->getNext()->setPrior($current);
+        $next_next = $current->getNext()->getNext();
+        $current->setNext($next_next);
         $this->length--;
         return 0;
     }
@@ -255,14 +256,15 @@ class DoubleLinkedList
     public function ReverseList()
     {
         $p = $this->head;
-        $temp = $this->head;
-        while ($p) {
+        while ($p){
             $temp = $p->getPrior();
             $p->setPrior($p->getNext());
             $p->setNext($temp);
-            if($p->getPrior() == null) break;
+            if($p->getPrior() === null) break;
             else $p = $p->getPrior();
         }
+        $this->head->setNext(null);
+        $this->head = $p;
         return 0;
     }
 
@@ -289,8 +291,8 @@ $a = new DoubleLinkedList();
 $a->InitList([1, 2, 3, 4, 5]);
 $a->ListInsert(2,33333);
 $a->ListPrint();
-//$a->ListDelete(1);
-//$a->ListPrint();
+$a->ListDelete(1);
+$a->ListPrint();
 $a->ReverseList();
 $a->ListPrint();
 

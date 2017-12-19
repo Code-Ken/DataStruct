@@ -159,7 +159,7 @@ class DoubleLinkedList {
             temp = p.prior;
             p.prior = p.next;
             p.next = temp;
-            if (p.prior == null) break;
+            if (p.prior === null) break;
             else p = p.prior;
         }
         this.head.next = null;
