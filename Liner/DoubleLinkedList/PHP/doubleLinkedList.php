@@ -229,7 +229,7 @@ class DoubleLinkedList
         if ($index < 0 || $index > $this->length) return -1;
         $pos = 0;
         $current = $this->head;
-        while ($pos < $index - 1) {
+        while ($pos < $index) {
             $current = $current->getNext();
             $pos++;
         }
