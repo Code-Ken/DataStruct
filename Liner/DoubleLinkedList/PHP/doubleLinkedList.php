@@ -3,7 +3,7 @@
 /**
  * Class Node
  */
-class Node
+class DuLNode
 {
     /**
      * @var
@@ -13,6 +13,10 @@ class Node
      * @var null
      */
     protected $next;
+    /**
+     * @var null
+     */
+    protected $prior;
 
     /**
      * Node constructor.
@@ -21,6 +25,7 @@ class Node
     public function __construct($value)
     {
         $this->data = $value;
+        $this->prior = null;
         $this->next = null;
     }
 
@@ -44,23 +49,43 @@ class Node
 
     /**
      * 设置节点数值
-     * @param Node $node
+     * @param DuLNode $node
      * @return int
      */
-    public function setNext(Node $node)
+    public function setNext(DuLNode $node)
     {
         $this->next = $node;
         return 0;
     }
 
+
+    /**
+     * 获取上一个节点
+     * @return null
+     */
+    public function getPrior()
+    {
+        return $this->prior;
+    }
+
+    /**
+     * 设置节点数值
+     * @param DuLNode $node
+     * @return int
+     */
+    public function setPrior(DuLNode $node)
+    {
+        $this->prior = $node;
+        return 0;
+    }
 }
 
 /**
- * 单链表的链式存储结构
+ * 双链表存储结构
  * @copyright   MIT.
  * @author      Ken(gaosong0301@foxmail.com)
  */
-class SingleList
+class DoubleLinkedList
 {
     /**
      * 头指针
@@ -89,7 +114,7 @@ class SingleList
     }
 
     /**
-     * 初始化单链表
+     * 初始化双链表
      * @param $arr
      * @return bool
      */
@@ -100,11 +125,12 @@ class SingleList
         }
         $count = count($arr);
         for ($i = 0; $i < $count; $i++) {
-            $node = new Node($arr[$i]);
+            $node = new DuLNode($arr[$i]);
             if (!$this->head) {
                 $this->head = $node;
                 $this->tail = $node;
             } else {
+                $node->setPrior($this->tail);
                 $this->tail->setNext($node);
                 $this->tail = $node;
             }
@@ -113,7 +139,7 @@ class SingleList
     }
 
     /**
-     * 判断单链表是否为空
+     * 判断双链表是否为空
      * @return bool
      */
     public function ListEmpty()
@@ -122,7 +148,7 @@ class SingleList
     }
 
     /**
-     * 将单链表清空
+     * 将双链表清空
      */
     public function ClearList()
     {
@@ -132,7 +158,7 @@ class SingleList
     }
 
     /**
-     * 获取单链表第i位的元素
+     * 获取双链表第i位的元素
      * @param $index
      * @return int
      */
@@ -149,7 +175,7 @@ class SingleList
     }
 
     /**
-     * 获取元素elem在单链表中的位置
+     * 获取元素elem在双链表中的位置
      * @param $elem
      * @return int
      */
@@ -170,7 +196,7 @@ class SingleList
     }
 
     /**
-     * 向单链表中的第i位插入元素
+     * 向双链表中的第i位插入元素
      * @param $index
      * @param $elem
      * @return int
@@ -179,20 +205,22 @@ class SingleList
     {
         if ($index < 0 || $index > $this->length) return -1;
         $pos = 0;
-        $node = new Node($elem);
+        $node = new DuLNode($elem);
         $current = $this->head;
         while ($pos < $index - 1) {
             $current = $current->getNext();
             $pos++;
         }
         $node->setNext($current->getNext());
+        $node->setPrior($current);
+        $current->getNext()->setPrior($node);
         $current->setNext($node);
         $this->length++;
         return 0;
     }
 
     /**
-     * 向单链表中的第i位删除元素
+     * 向双链表中的第i位删除元素
      * @param $index
      * @return int
      */
@@ -205,14 +233,14 @@ class SingleList
             $current = $current->getNext();
             $pos++;
         }
-        $next = $current->getNext()->getNext();
-        $current->setNext($next);
+        $current->getNext()->getNext()->setPrior($current->getNext());
+        $current->setNext($current->getNext()->getNext());
         $this->length--;
         return 0;
     }
 
     /**
-     * 获取单链表的长度
+     * 获取双链表的长度
      * @return int
      */
     public function ListLength()
@@ -227,18 +255,13 @@ class SingleList
     public function ReverseList()
     {
         $p = $this->head;
-        $q = null;
-        $length = $this->length;
-        while ($length > 1) {
-            $q = $p->getNext();
-            $tmp = $q->getNext();
-            if ($tmp) {
-                $p->setNext($tmp);
-            }
-            $q->setNext($this->head);
-
-            $this->head = $q;
-            $length--;
+        $temp = $this->head;
+        while ($p) {
+            $temp = $p->getPrior();
+            $p->setPrior($p->getNext());
+            $p->setNext($temp);
+            if($p->getPrior() == null) break;
+            else $p = $p->getPrior();
         }
         return 0;
     }
@@ -261,15 +284,14 @@ class SingleList
     }
 }
 
-$list = new SingleList();
-$list->InitList([1, 2, 3, 4, 5, 6]);
-$list->ReverseList();
-$list->ListPrint();
-var_dump($list->GetElem(1));
-var_dump($list->LocateElem(1));
-$list->ListInsert(1, 222);
-$list->ListPrint();
-$list->ListDelete(2);
-$list->ListPrint();
+
+$a = new DoubleLinkedList();
+$a->InitList([1, 2, 3, 4, 5]);
+$a->ListInsert(2,33333);
+$a->ListPrint();
+//$a->ListDelete(1);
+//$a->ListPrint();
+$a->ReverseList();
+$a->ListPrint();
 
 
